@@ -17,7 +17,7 @@ class SiteSettingResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationLabel = 'Pengaturan Web';
     protected static ?string $navigationGroup = 'System';
-    
+
     public static function canCreate(): bool
     {
         return SiteSetting::count() === 0;
@@ -34,7 +34,7 @@ class SiteSettingResource extends Resource
                             ->label('Judul Besar')
                             ->default('BISING NGERILIS JIWA LO')
                             ->columnSpanFull(),
-                        
+
                         Forms\Components\Textarea::make('hero_description')
                             ->label('Deskripsi Pendek')
                             ->rows(3)
@@ -48,7 +48,7 @@ class SiteSettingResource extends Resource
                         Forms\Components\ColorPicker::make('primary_color')
                             ->label('Warna Utama (Neon)')
                             ->required(),
-                        
+
                         Forms\Components\ColorPicker::make('secondary_color')
                             ->label('Warna Sekunder')
                             ->required(),
@@ -57,6 +57,25 @@ class SiteSettingResource extends Resource
                             ->label('Warna Background')
                             ->default('#050505')
                             ->required(),
+                    ])->columns(3),
+
+                Forms\Components\Section::make('Rekening & Pembayaran')
+                    ->schema([
+                        Forms\Components\TextInput::make('bank_name')
+                            ->label('Nama Bank')
+                            ->placeholder('Contoh: BCA'),
+
+                        Forms\Components\TextInput::make('bank_account_number')
+                            ->label('Nomor Rekening'),
+
+                        Forms\Components\TextInput::make('bank_account_name')
+                            ->label('Atas Nama'),
+
+                        Forms\Components\FileUpload::make('qris_image')
+                            ->label('Upload Gambar QRIS')
+                            ->image()
+                            ->directory('payments')
+                            ->columnSpanFull(),
                     ])->columns(3),
 
                 // TAB 3: OTAL ORACLE (AI)
@@ -74,7 +93,7 @@ class SiteSettingResource extends Resource
                         Forms\Components\TextInput::make('location_name')
                             ->label('Nama Lokasi')
                             ->default('JAKARTA (GBK)'),
-                        
+
                         // UPDATE DISINI: Pakai DateTimePicker
                         Forms\Components\DateTimePicker::make('event_date')
                             ->label('Waktu Event Mulai (Tanggal & Jam)')

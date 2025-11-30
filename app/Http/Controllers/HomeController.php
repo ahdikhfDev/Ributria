@@ -6,16 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\SiteSetting;
 use App\Models\Artist;
 use App\Models\Ticket;
-use App\Models\Track; // Jangan lupa import Model Track
+use App\Models\Track;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        // 1. Ambil Settingan
+        // 1. Ambil Settingan Global
         $settings = SiteSetting::first();
         if (!$settings) {
+            // Default dummy data jika database kosong
             $settings = new SiteSetting([
                 'hero_title' => 'BISING NGERILIS JIWA LO',
                 'primary_color' => '#ff1f1f',
@@ -26,7 +27,7 @@ class HomeController extends Controller
             ]);
         }
 
-        // 2. Ambil Artis
+        // 2. Ambil Artis (Lineup)
         $artists = Artist::where('is_active', true)
             ->orderBy('sort_order')
             ->get()
@@ -38,7 +39,7 @@ class HomeController extends Controller
                 ];
             });
 
-        // 3. AMBIL LAGU (Playlist) - BARU
+        // 3. Ambil Lagu (Playlist)
         $tracks = Track::where('is_active', true)
             ->orderBy('sort_order')
             ->get()
@@ -46,25 +47,27 @@ class HomeController extends Controller
                 return [
                     'title' => $track->title,
                     'artist' => $track->artist ?? 'Unknown',
-                    // Cek: kalau link http pake langsung, kalau file lokal pake asset()
+                    // Cek apakah link eksternal atau file lokal
                     'url' => str_starts_with($track->audio_url, 'http') ? $track->audio_url : asset($track->audio_url),
                 ];
             });
 
-        // 4. Ambil Tiket
+        // 4. Ambil Tiket (UPDATE: Tambah ID)
         $tickets = Ticket::all()->map(function ($ticket) {
             return [
+                'id' => $ticket->id, // <--- PENTING: ID ini dipakai form checkout
                 'name' => $ticket->name,
                 'price' => $ticket->price_display, 
                 'features' => $ticket->features ?? [],
                 'glow' => (bool) $ticket->is_featured,
+                // Logic styling sederhana
                 'borderColor' => $ticket->is_featured ? '' : ($ticket->name == 'DEWA / VVIP' ? 'border-yellow-500' : 'border-gray-600'),
                 'textColor' => $ticket->name == 'DEWA / VVIP' ? 'text-yellow-500' : 'text-gray-400',
                 'icon' => $ticket->is_featured ? 'zap' : ($ticket->name == 'DEWA / VVIP' ? 'crown' : 'skull'),
             ];
         });
 
-        // Kirim $tracks ke view
+        // Kirim semua data ke view
         return view('home', compact('settings', 'artists', 'tickets', 'tracks'));
     }
 }

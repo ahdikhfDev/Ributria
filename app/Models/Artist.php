@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Artist extends Model
 {
     protected $guarded = [];
+
+    protected static function boot()
+{
+    parent::boot();
+
+    static::deleting(function ($artist) {
+        if ($artist->image && \Storage::disk('public')->exists($artist->image)) {
+            \Storage::disk('public')->delete($artist->image);
+        }
+    });
 }
+
+}
+

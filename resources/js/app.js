@@ -1,37 +1,47 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
 import { createIcons, icons } from 'lucide';
-// import axios from 'axios'; // KITA HAPUS BIAR PAKE BAWAAN LARAVEL
 
 window.Alpine = Alpine;
 
 Alpine.data('appData', (serverLineup, serverTickets, serverSettings, serverTracks) => ({
+    // --- STATE UI & GLOBAL ---
     menuOpen: false,
     mousePos: { x: 0, y: 0 },
     timeLeft: { HARI: 0, JAM: 0, MENIT: 0, DETIK: 0 },
+    
+    // --- CHAT STATE ---
     chatOpen: false,
     inputMsg: '',
     messages: [{ role: 'model', text: 'SISTEM ONLINE. Gue Oracle. Tanya apa aja soal keributan ini.' }],
     isAiLoading: false,
     
-    // PLAYER STATE
+    // --- PLAYER STATE ---
     isPlaying: false,
     currentTrackIdx: 0,
     audioObj: null,
     tracks: serverTracks || [], 
 
-    // Data Lain
+    // --- DATA UTAMA ---
     lineup: serverLineup,
     tickets: serverTickets,
     settings: serverSettings,
     
-    // PERBAIKAN 1: Tambahkan ini biar tidak error "hoveredArtist is not defined"
+    // --- STATE CHECKOUT ---
+    checkoutOpen: false,
+    selectedTicket: null,
+    checkoutForm: { name: '', email: '', phone: '', qty: 1 },
+
+    // --- STATE CEK STATUS ---
+    checkCode: '',
+    checkResult: null,
+
+    // State Tambahan
     hoveredArtist: null, 
-    
-    // Newsletter State
     newsletterEmail: '',
     newsletterStatus: '',
 
+    // --- HELPER ---
     get activeTheme() { 
         return {
             primary: this.settings.primary_color,
@@ -47,16 +57,23 @@ Alpine.data('appData', (serverLineup, serverTickets, serverSettings, serverTrack
         return this.tracks[this.currentTrackIdx] || { title: 'NO SIGNAL', artist: 'OFFLINE' };
     },
 
+    get estimatedTotal() {
+        if (!this.selectedTicket) return 0;
+        let priceStr = this.selectedTicket.price.toUpperCase();
+        let price = 0;
+        if (priceStr.includes('K')) {
+            price = parseInt(priceStr.replace(/[^0-9]/g, '')) * 1000;
+        } else {
+            price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+        }
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price * this.checkoutForm.qty);
+    },
+
+    // --- INIT ---
     init() {
         document.documentElement.style.setProperty('--primary-color', this.settings.primary_color);
-        
-        console.log("🎵 Playlist Loaded:", this.tracks);
-
-        // Cek Token CSRF
         const token = document.querySelector('meta[name="csrf-token"]');
-        if (!token) {
-            console.error("⚠️ CSRF TOKEN TIDAK DITEMUKAN DI <HEAD>! Form tidak akan jalan.");
-        }
+        if (!token) console.error("⚠️ CSRF TOKEN MISSING");
 
         const eventDateStr = this.settings.event_date;
         if (eventDateStr) {
@@ -89,38 +106,68 @@ Alpine.data('appData', (serverLineup, serverTickets, serverSettings, serverTrack
         this.mousePos.y = (e.clientY / window.innerHeight) * 2 - 1;
     },
 
-    // PLAYER LOGIC
+    // --- LOGIC CEK STATUS (UPDATED: DEBUGGING) ---
+    async checkTransaction() {
+        let rawInput = this.checkCode.trim();
+
+        if (!rawInput) return;
+        
+        this.checkResult = null; 
+        
+        try {
+            console.log("🔍 Checking:", rawInput); 
+
+            // Kirim ke Controller
+            const response = await window.axios.post('/ticket/check-status', { 
+                code: rawInput 
+            });
+            
+            this.checkResult = response.data;
+            console.log("✅ Result:", response.data);
+            
+        } catch (e) {
+            console.error("❌ Check Error:", e);
+            
+            // Tangkap pesan error spesifik dari server (jika ada)
+            let errorMessage = "DATA GAK KETEMU.";
+            if (e.response && e.response.data && e.response.data.message) {
+                errorMessage = e.response.data.message;
+            }
+
+            // Simpan status error dan pesannya biar bisa ditampilkan (kalau view support)
+            // Atau minimal console log biar kita tau kenapa
+            console.warn("Server Message:", errorMessage);
+
+            this.checkResult = { status: 'error', message: errorMessage };
+        }
+    },
+
+    // --- LOGIC CHECKOUT ---
+    openCheckout(ticket) {
+        this.selectedTicket = ticket;
+        this.checkoutForm.qty = 1; 
+        this.checkoutOpen = true;
+    },
+
+    closeCheckout() {
+        this.checkoutOpen = false;
+        setTimeout(() => this.selectedTicket = null, 300);
+    },
+
+    // --- PLAYER LOGIC ---
     togglePlay() { 
         if (this.tracks.length === 0) {
             alert("⚠️ Playlist Kosong! Upload lagu dulu di Admin Panel.");
             return;
         }
-
         if (!this.audioObj) {
             const url = this.tracks[this.currentTrackIdx].url;
             this.audioObj = new Audio(url);
-            
-            this.audioObj.addEventListener('error', (e) => {
-                console.error("❌ Audio Error:", e);
-                alert("Gagal memutar lagu. Link mungkin rusak.");
-                this.isPlaying = false;
-            });
-
-            this.audioObj.addEventListener('ended', () => {
-                this.nextTrack();
-            });
+            this.audioObj.addEventListener('error', (e) => { alert("Gagal putar lagu. Link rusak."); this.isPlaying = false; });
+            this.audioObj.addEventListener('ended', () => this.nextTrack());
         }
-
-        if (this.isPlaying) {
-            this.audioObj.pause();
-            this.isPlaying = false;
-        } else {
-            this.audioObj.play().catch(e => {
-                console.error("Play Error:", e);
-                this.isPlaying = false;
-            });
-            this.isPlaying = true;
-        }
+        if (this.isPlaying) { this.audioObj.pause(); this.isPlaying = false; } 
+        else { this.audioObj.play(); this.isPlaying = true; }
     },
 
     nextTrack() { 
@@ -143,24 +190,17 @@ Alpine.data('appData', (serverLineup, serverTickets, serverSettings, serverTrack
         this.refreshIcons();
     },
 
-    // NEWSLETTER
+    // --- NEWSLETTER & CHAT ---
     async submitNewsletter() {
         if (!this.newsletterEmail) return;
-        
         try {
-            // PERBAIKAN 2: Gunakan window.axios agar CSRF Token terbawa
             await window.axios.post('/subscribe', { email: this.newsletterEmail });
-            
             this.newsletterStatus = 'SUCCESS';
             this.newsletterEmail = '';
             setTimeout(() => this.newsletterStatus = '', 3000);
-        } catch (e) {
-            console.error("Submit Error:", e);
-            this.newsletterStatus = 'ERROR';
-        }
+        } catch (e) { this.newsletterStatus = 'ERROR'; }
     },
 
-    // CHAT
     async handleSend() {
         if (!this.inputMsg.trim()) return;
         const userText = this.inputMsg;
@@ -168,20 +208,13 @@ Alpine.data('appData', (serverLineup, serverTickets, serverSettings, serverTrack
         this.inputMsg = '';
         this.isAiLoading = true;
         this.scrollToBottom();
-
         try {
-            // PERBAIKAN 3: Gunakan window.axios
-            const response = await window.axios.post('/api/chat', {
-                message: userText,
-                theme: 'Custom' 
-            });
+            const response = await window.axios.post('/api/chat', { message: userText, theme: 'Custom' });
             this.messages.push({ role: 'model', text: response.data.reply });
-        } catch (error) {
-            console.error("Chat Error:", error);
-            this.messages.push({ role: 'model', text: "SISTEM ERROR: Cek koneksi server." });
-        } finally {
-            this.isAiLoading = false;
-            this.scrollToBottom();
+        } catch (e) { 
+            this.messages.push({ role: 'model', text: "SISTEM ERROR." }); 
+        } finally { 
+            this.isAiLoading = false; this.scrollToBottom(); 
         }
     },
 

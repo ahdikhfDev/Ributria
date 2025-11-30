@@ -21,6 +21,8 @@
     
     @include('components.tickets')
     
+    @include('components.check-status')
+    
     @include('components.newsletter')
     
     @include('components.footer')
