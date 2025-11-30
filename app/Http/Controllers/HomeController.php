@@ -23,7 +23,7 @@ class HomeController extends Controller
                 'secondary_color' => '#ccff00',
                 'background_color' => '#050505',
                 'location_name' => 'JAKARTA (GBK)',
-                'event_date' => now()->addDays(30), 
+                'event_date' => now()->addDays(30),
             ]);
         }
 
@@ -55,12 +55,13 @@ class HomeController extends Controller
         // 4. Ambil Tiket (UPDATE: Tambah ID)
         $tickets = Ticket::all()->map(function ($ticket) {
             return [
-                'id' => $ticket->id, // <--- PENTING: ID ini dipakai form checkout
+                'id' => $ticket->id,
                 'name' => $ticket->name,
-                'price' => $ticket->price_display, 
+                'price' => $ticket->price_display,
+                'stock' => $ticket->stock,            // <--- WAJIB DITAMBAH
+                'is_sold_out' => $ticket->is_sold_out, // <--- WAJIB DITAMBAH
                 'features' => $ticket->features ?? [],
                 'glow' => (bool) $ticket->is_featured,
-                // Logic styling sederhana
                 'borderColor' => $ticket->is_featured ? '' : ($ticket->name == 'DEWA / VVIP' ? 'border-yellow-500' : 'border-gray-600'),
                 'textColor' => $ticket->name == 'DEWA / VVIP' ? 'text-yellow-500' : 'text-gray-400',
                 'icon' => $ticket->is_featured ? 'zap' : ($ticket->name == 'DEWA / VVIP' ? 'crown' : 'skull'),

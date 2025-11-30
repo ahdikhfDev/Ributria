@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('price_display');
+            $table->integer('stock')->default(100);
             $table->json('features')->nullable();
             $table->boolean('is_sold_out')->default(false);
             $table->boolean('is_featured')->default(false);

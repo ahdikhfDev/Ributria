@@ -1,14 +1,22 @@
 <!-- Player cuma muncul kalau ada lagu di playlist -->
 <div class="fixed bottom-6 left-6 z-50 hidden md:flex items-center gap-4 bg-[#111] border border-white/20 p-2 pr-6 rounded-full pointer-events-auto shadow-2xl backdrop-blur-md"
      x-show="tracks && tracks.length > 0" 
-     style="display: none;"> <!-- Default hidden biar gak glitcy pas load -->
+     style="display: none;"> 
     
-    <!-- Album Art Animasi -->
-    <div class="relative w-12 h-12 rounded-full overflow-hidden border animate-spin-slow" 
+    <!-- Album Art Animasi (Kaset/Vinyl) -->
+    <div class="relative w-12 h-12 rounded-full overflow-hidden border-2 animate-spin-slow bg-black" 
          :style="`animation-play-state: ${isPlaying ? 'running' : 'paused'}; border-color: ${activeTheme.primary}`">
-        <!-- Placeholder Cover Art (Hitam Polos) -->
-        <div class="w-full h-full bg-gray-800"></div> 
+        
+        <!-- Gambar Vinyl / CD -->
+        <img src="https://cdn.pixabay.com/photo/2018/05/08/21/28/vinyl-3384002_1280.png" 
+             alt="Spinning Disc" 
+             class="w-full h-full object-cover opacity-80">
+
+        <!-- Overlay Warna Tema -->
         <div class="absolute inset-0 mix-blend-overlay" :style="`background-color: ${activeTheme.primary}`"></div>
+        
+        <!-- Lubang Tengah (Biar kayak CD beneran) -->
+        <div class="absolute top-1/2 left-1/2 w-3 h-3 bg-[#111] rounded-full transform -translate-x-1/2 -translate-y-1/2 border border-white/30"></div>
     </div>
     
     <!-- Info Lagu -->

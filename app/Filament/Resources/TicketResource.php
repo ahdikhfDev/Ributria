@@ -22,7 +22,7 @@ class TicketResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()
+                Forms\Components\Section::make('Detail Tiket')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Nama Paket')
@@ -34,7 +34,14 @@ class TicketResource extends Resource
                             ->placeholder('Contoh: IDR 1.500K')
                             ->required(),
 
-                        // INI YANG LU MINTA: Tags Input buat fitur
+                        // FIELD BARU: Input Stok
+                        Forms\Components\TextInput::make('stock')
+                            ->label('Stok Tiket')
+                            ->numeric()
+                            ->default(100)
+                            ->required()
+                            ->helperText('Jumlah tiket yang tersedia. Nanti berkurang otomatis saat ada pembelian.'),
+
                         Forms\Components\TagsInput::make('features')
                             ->label('Benefit / Fitur')
                             ->placeholder('Ketik fitur lalu tekan Enter')
@@ -44,6 +51,7 @@ class TicketResource extends Resource
                             ->schema([
                                 Forms\Components\Toggle::make('is_sold_out')
                                     ->label('Status SOLD OUT')
+                                    ->helperText('Centang ini kalau mau maksa tiket habis (walaupun stok masih ada).')
                                     ->onColor('danger'),
                                 
                                 Forms\Components\Toggle::make('is_featured')
@@ -63,9 +71,15 @@ class TicketResource extends Resource
                 
                 Tables\Columns\TextColumn::make('price_display')
                     ->label('Harga'),
+
+                // KOLOM BARU: Tampilkan Sisa Stok
+                Tables\Columns\TextColumn::make('stock')
+                    ->label('Sisa Stok')
+                    ->badge()
+                    ->color(fn (string $state): string => $state < 10 ? 'danger' : 'success'), // Merah kalau < 10
                 
                 Tables\Columns\IconColumn::make('is_sold_out')
-                    ->label('Sold Out')
+                    ->label('Status Habis')
                     ->boolean()
                     ->trueColor('danger'),
 

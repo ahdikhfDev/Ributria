@@ -40,6 +40,39 @@ class SiteSettingResource extends Resource
                             ->rows(3)
                             ->columnSpanFull(),
                     ]),
+                
+                // TAB BARU: VISUAL TIKET (Untuk Hero 3D Ticket)
+                Forms\Components\Section::make('Visual Tiket (Hiasan Hero)')
+                    ->description('Atur teks yang muncul di gambar tiket 3D di halaman depan.')
+                    ->schema([
+                        Forms\Components\Grid::make(2)->schema([
+                            Forms\Components\TextInput::make('ticket_label_top')
+                                ->label('Label Atas')
+                                ->default('PUSAT SENI'),
+
+                            Forms\Components\TextInput::make('ticket_label_title')
+                                ->label('Label Judul (Tengah)')
+                                ->default('BISING NGERILIS...')
+                                ->placeholder('BISING NGERILIS...'),
+                            
+                            Forms\Components\TextInput::make('ticket_label_bottom')
+                                ->label('Label Bawah')
+                                ->default('TAMPIL LIVE'),
+
+                            Forms\Components\TextInput::make('ticket_label_left')
+                                ->label('Label Kiri (Vertical)')
+                                ->default('BISING NGE')
+                                ->placeholder('BISING NGE'),
+                                
+                            Forms\Components\TextInput::make('ticket_price_label')
+                                ->label('Label Harga')
+                                ->default('HARGA'),
+
+                            Forms\Components\TextInput::make('ticket_price_display')
+                                ->label('Tampilan Harga')
+                                ->default('Rp 750K++'),
+                        ]),
+                    ]),
 
                 // TAB 2: TEMA WARNA
                 Forms\Components\Section::make('Tema Warna')
@@ -59,6 +92,26 @@ class SiteSettingResource extends Resource
                             ->required(),
                     ])->columns(3),
 
+                // TAB 4: INFO LOKASI & WAKTU (UPDATED KOORDINAT)
+                Forms\Components\Section::make('Info Event')
+                    ->schema([
+                        Forms\Components\TextInput::make('location_name')
+                            ->label('Nama Lokasi')
+                            ->default('JAKARTA (GBK)'),
+                        
+                        // FIELD BARU: KOORDINAT PETA
+                        Forms\Components\TextInput::make('footer_coordinates')
+                            ->label('Koordinat Peta (Footer)')
+                            ->default('-6.2088° S, 106.8456° E')
+                            ->placeholder('-6.2088° S, 106.8456° E'),
+
+                        Forms\Components\DateTimePicker::make('event_date')
+                            ->label('Waktu Event Mulai (Tanggal & Jam)')
+                            ->seconds(false) 
+                            ->required(),
+                    ])->columns(2),
+
+                // TAB 5: REKENING (Tetap Ada)
                 Forms\Components\Section::make('Rekening & Pembayaran')
                     ->schema([
                         Forms\Components\TextInput::make('bank_name')
@@ -86,20 +139,6 @@ class SiteSettingResource extends Resource
                             ->rows(5)
                             ->default("You are 'The Oracle', hype-man for RiButRiA festival."),
                     ]),
-
-                // TAB 4: INFO LOKASI & WAKTU (UPDATED)
-                Forms\Components\Section::make('Info Event')
-                    ->schema([
-                        Forms\Components\TextInput::make('location_name')
-                            ->label('Nama Lokasi')
-                            ->default('JAKARTA (GBK)'),
-
-                        // UPDATE DISINI: Pakai DateTimePicker
-                        Forms\Components\DateTimePicker::make('event_date')
-                            ->label('Waktu Event Mulai (Tanggal & Jam)')
-                            ->seconds(false) // Gak perlu detik biar simpel
-                            ->required(),
-                    ])->columns(2),
             ]);
     }
 

@@ -3,62 +3,66 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema; // Import Schema
 use App\Models\SiteSetting;
 use App\Models\Artist;
 use App\Models\Ticket;
-use App\Models\Track; // Jangan lupa import Model Track
+use App\Models\Track;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. SEED SITE SETTINGS (Data Global)
+        // DISABLE FOREIGN KEY CHECKS (Supaya bisa truncate tabel berelasi)
+        Schema::disableForeignKeyConstraints();
+
+        // 1. SEED SITE SETTINGS
         SiteSetting::truncate();
         
         SiteSetting::create([
             'hero_title' => "BISING\nNGERILIS\nJIWA LO",
             'hero_description' => "Sistem tiket konser masa depan. Bukan cuma tiket doang, tapi akses ke dunia audio-visual tanpa batas.\nJangan cuma nonton. Bikin ribut.",
-            'primary_color' => '#ff1f1f', // Merah Neon
-            'secondary_color' => '#ccff00', // Hijau Acid
-            'background_color' => '#050505', // Hitam Pekat
+            'primary_color' => '#ff1f1f',
+            'secondary_color' => '#ccff00',
+            'background_color' => '#050505',
             'location_name' => 'JAKARTA (GBK)',
-            // Set event date 30 hari dari sekarang biar countdown jalan
             'event_date' => now()->addDays(30)->setTime(19, 0, 0),
-            'oracle_prompt' => "You are 'The Oracle', the ultimate hype-man and guide for the RiButRiA music festival. 
-            
-            Persona: Lo adalah anak musik banget, enerjik, seru, dan edgy. Lo tau segalanya soal stage, sound system, dan crowd.
-            Gaya bahasa: Casual Indonesian Slang (Bahasa Gaul, Lo/Gue).
-            
-            PENTING: Fokus pada vibe KONSER, STAGE, MUSIK, dan CROWD. JANGAN gunakan metafora teknologi, coding, glitch, atau hacking.",
+            'oracle_prompt' => "You are 'The Oracle', the ultimate hype-man and guide for the RiButRiA music festival.",
         ]);
 
-        // 2. SEED ARTISTS (Lineup)
+        // 2. SEED ARTISTS
         Artist::truncate();
 
         $artists = [
             [
-                'name' => 'THE CHAOS ENGINE',
+                'name' => 'RIRIS MULYANTI',
                 'genre' => 'INDUSTRIAL NOISE',
                 'image' => null, 
                 'sort_order' => 1,
             ],
             [
-                'name' => 'NEON VAMPIRES',
+                'name' => 'AHDI KHALIDA FATHIR',
                 'genre' => 'SYNTHWAVE',
                 'image' => null,
                 'sort_order' => 2,
             ],
             [
-                'name' => 'DATA MOSH',
+                'name' => 'LUTFI',
                 'genre' => 'GLITCH HOP',
                 'image' => null,
                 'sort_order' => 3,
             ],
             [
-                'name' => 'VOID WALKER',
+                'name' => 'KEYSA',
                 'genre' => 'DARK AMBIENT',
                 'image' => null,
                 'sort_order' => 4,
+            ],
+            [
+                'name' => 'FAIZ',
+                'genre' => 'DARK AMBIENT',
+                'image' => null,
+                'sort_order' => 5,
             ],
         ];
 
@@ -82,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 'price_display' => 'IDR 1.500K',
                 'features' => ['Paling Depan (Moshpit)', 'Masuk Jalur Cepat', 'Toilet VIP', '3x Minum Gratis'],
                 'is_sold_out' => false,
-                'is_featured' => true, // Highlighted
+                'is_featured' => true,
             ],
             [
                 'name' => 'DEWA / VVIP',
@@ -97,7 +101,7 @@ class DatabaseSeeder extends Seeder
             Ticket::create($ticket);
         }
 
-        // 4. SEED TRACKS (Playlist Musik) - INI YANG BARU
+        // 4. SEED TRACKS
         Track::truncate();
 
         $tracks = [
@@ -120,5 +124,8 @@ class DatabaseSeeder extends Seeder
         foreach ($tracks as $track) {
             Track::create($track);
         }
+
+        // RE-ENABLE FOREIGN KEY CHECKS (PENTING!)
+        Schema::enableForeignKeyConstraints();
     }
 }
