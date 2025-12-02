@@ -4,7 +4,7 @@
     <div class="container mx-auto px-6 relative z-10">
         <!-- Header -->
         <div class="text-center mb-20">
-            <h2 class="text-5xl md:text-6xl font-black uppercase mb-4" :style="`color: ${activeTheme.text}`">PILIH AKSES <span :style="`color: ${activeTheme.primary}`">LO</span></h2>
+            <h2 class="text-5xl md:text-6xl font-black uppercase mb-4" :style="`color: ${activeTheme.text}`">PILIH<span :style="`color: ${activeTheme.primary}`"> AKSES</span></h2>
             <p class="text-gray-500 font-mono">TEMPAT TERBATAS. AMANIN POSISI LO SEKARANG.</p>
         </div>
 

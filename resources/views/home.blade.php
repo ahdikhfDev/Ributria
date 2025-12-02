@@ -11,7 +11,7 @@
         <div class="animate-marquee whitespace-nowrap font-black text-3xl uppercase flex gap-12">
             <template x-for="i in 8">
                 <span class="flex items-center gap-4">
-                    AMBIL TIKET LO <i data-lucide="star" class="fill-black w-6 h-6"></i> JANGAN LEWATIN KESERUANNYA <i data-lucide="zap" class="fill-black w-6 h-6"></i>
+                    AMBIL TIKET <i data-lucide="star" class="fill-black w-6 h-6"></i> JANGAN LEWATIN KESERUANNYA <i data-lucide="zap" class="fill-black w-6 h-6"></i>
                 </span>
             </template>
         </div>

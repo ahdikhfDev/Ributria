@@ -8,7 +8,7 @@
         <!-- HEADER & SEARCH BOX (Desain Simpel Pilihan Lo) -->
         <div class="max-w-2xl mx-auto text-center">
             <h2 class="text-4xl font-black uppercase mb-2" :style="`color: ${activeTheme.text}`">
-                CEK <span :style="`color: ${activeTheme.primary}`">STATUS LO</span>
+                CEK <span :style="`color: ${activeTheme.primary}`">STATUS</span>
             </h2>
             <p class="text-gray-500 font-mono mb-8">
                 Udah transfer? Masukin kode booking lo di sini buat cek status tiket.
