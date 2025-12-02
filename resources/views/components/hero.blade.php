@@ -5,8 +5,7 @@
         <div class="relative transition-transform duration-100 ease-out" 
              :style="window.innerWidth > 768 ? `transform: translate(${mousePos.x * -10}px, ${mousePos.y * -10}px)` : ''">
             
-            <!-- (Countdown DIPINDAHKAN DARI SINI KE KANAN) -->
-
+            <!-- (Countdown -->
             <div class="flex justify-center md:justify-start mb-6 md:mt-16">
                 <div class="inline-flex items-center gap-2 px-3 py-1 border bg-white/5 rounded-full text-[10px] md:text-xs font-bold tracking-widest backdrop-blur-sm"
                      :style="`border-color: ${activeTheme.primary}4D; color: ${activeTheme.primary}`">
@@ -44,17 +43,15 @@
     </div>
 
     <!-- Right: Ticket Visual (Animasi 3D) -->
-    <!-- Tambahkan 'flex-col' untuk menumpuk Countdown di atas Tiket -->
     <div class="w-full md:w-1/2 h-[400px] md:h-full relative flex flex-col items-center justify-center pointer-events-none md:pointer-events-auto order-1 md:order-2 mb-8 md:mb-0 mt-20 md:mt-0">
         
         <!-- Glow Background -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[400px] md:h-[400px] rounded-full blur-[80px] md:blur-[120px] opacity-20 animate-pulse-slow" :style="`background-color: ${activeTheme.primary}`"></div>
 
-        <!-- COUNTDOWN (DIPINDAHKAN KE SINI) -->
+        <!-- COUNTDOWN -->
         <div class="relative z-40 flex justify-center gap-2 md:gap-4 mb-8 font-mono animate-fade-in-up" :style="`color: ${activeTheme.primary}`">
             <template x-for="(value, unit) in timeLeft">
                 <div class="text-center">
-                    <!-- Tambah background gelap transparan biar kebaca jelas di atas glow -->
                     <div class="text-xl md:text-3xl font-black bg-black/50 border border-white/20 px-2 md:px-3 py-2 rounded mb-1 min-w-[45px] md:min-w-[60px] backdrop-blur-md shadow-lg" x-text="value.toString().padStart(2, '0')"></div>
                     <div class="text-[8px] md:text-[10px] uppercase tracking-wider opacity-80 font-bold bg-black/30 rounded px-1" x-text="unit"></div>
                 </div>
