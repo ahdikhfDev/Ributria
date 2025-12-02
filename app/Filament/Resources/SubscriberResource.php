@@ -12,12 +12,11 @@ class SubscriberResource extends Resource
 {
     protected static ?string $model = Subscriber::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users'; // Icon User
-    protected static ?string $navigationLabel = 'List Email'; // Label Simpel
+    protected static ?string $navigationIcon = 'heroicon-o-users'; 
+    protected static ?string $navigationLabel = 'List Email'; 
     protected static ?string $modelLabel = 'Subscriber';
     protected static ?string $navigationGroup = 'Marketing';
 
-    // Matikan fitur Create manual, karena admin gak perlu input sendiri
     public static function canCreate(): bool { return false; } 
 
     public static function table(Table $table): Table
@@ -37,9 +36,9 @@ class SubscriberResource extends Resource
                     ->dateTime('d M Y, H:i')
                     ->sortable(),
             ])
-            ->defaultSort('created_at', 'desc') // Email baru paling atas
+            ->defaultSort('created_at', 'desc') 
             ->actions([
-                Tables\Actions\DeleteAction::make(), // Admin cuma bisa hapus data
+                Tables\Actions\DeleteAction::make(), 
             ]);
     }
     

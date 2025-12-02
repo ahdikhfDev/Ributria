@@ -52,7 +52,6 @@ class TransactionResource extends Resource
 
                         Forms\Components\Section::make('Detail Pembayaran')
                             ->schema([
-                                // Status tetep Select karena mau diedit admin
                                 Forms\Components\Select::make('status')
                                     ->label('Status Transaksi')
                                     ->options([

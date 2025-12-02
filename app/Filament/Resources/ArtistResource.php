@@ -39,7 +39,7 @@ class ArtistResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->label('Foto Artis')
                             ->image()
-                            ->directory('artists') // Disimpan di storage/app/public/artists
+                            ->directory('artists')
                             ->columnSpanFull(),
                     ])->columns(2),
 

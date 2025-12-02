@@ -22,7 +22,6 @@ class LatestTransactions extends BaseWidget
     {
         return $table
             ->query(
-                // Ambil 5 transaksi terakhir yang masuk
                 Transaction::query()->latest()->limit(5)
             )
             ->columns([
@@ -64,7 +63,6 @@ class LatestTransactions extends BaseWidget
                     ->label('Waktu'),
             ])
             ->actions([
-                // Tombol pintas buat langsung edit/approve transaksi
                 Tables\Actions\Action::make('open')
                     ->label('Proses')
                     ->icon('heroicon-m-pencil-square')

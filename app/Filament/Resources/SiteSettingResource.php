@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingResource extends Resource
 {
@@ -40,7 +41,7 @@ class SiteSettingResource extends Resource
                             ->rows(3)
                             ->columnSpanFull(),
                     ]),
-                
+
                 // TAB BARU: VISUAL TIKET (Untuk Hero 3D Ticket)
                 Forms\Components\Section::make('Visual Tiket (Hiasan Hero)')
                     ->description('Atur teks yang muncul di gambar tiket 3D di halaman depan.')
@@ -54,7 +55,7 @@ class SiteSettingResource extends Resource
                                 ->label('Label Judul (Tengah)')
                                 ->default('BISING NGERILIS...')
                                 ->placeholder('BISING NGERILIS...'),
-                            
+
                             Forms\Components\TextInput::make('ticket_label_bottom')
                                 ->label('Label Bawah')
                                 ->default('TAMPIL LIVE'),
@@ -63,7 +64,7 @@ class SiteSettingResource extends Resource
                                 ->label('Label Kiri (Vertical)')
                                 ->default('BISING NGE')
                                 ->placeholder('BISING NGE'),
-                                
+
                             Forms\Components\TextInput::make('ticket_price_label')
                                 ->label('Label Harga')
                                 ->default('HARGA'),
@@ -98,7 +99,7 @@ class SiteSettingResource extends Resource
                         Forms\Components\TextInput::make('location_name')
                             ->label('Nama Lokasi')
                             ->default('JAKARTA (GBK)'),
-                        
+
                         // FIELD BARU: KOORDINAT PETA
                         Forms\Components\TextInput::make('footer_coordinates')
                             ->label('Koordinat Peta (Footer)')
@@ -107,7 +108,7 @@ class SiteSettingResource extends Resource
 
                         Forms\Components\DateTimePicker::make('event_date')
                             ->label('Waktu Event Mulai (Tanggal & Jam)')
-                            ->seconds(false) 
+                            ->seconds(false)
                             ->required(),
                     ])->columns(2),
 
@@ -128,6 +129,10 @@ class SiteSettingResource extends Resource
                             ->label('Upload Gambar QRIS')
                             ->image()
                             ->directory('payments')
+                            ->deleteUploadedFileUsing(function ($file) {
+                                // otomatis hapus file saat field dihapus
+                                Storage::disk('public')->delete($file);
+                            })
                             ->columnSpanFull(),
                     ])->columns(3),
 

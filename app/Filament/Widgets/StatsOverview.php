@@ -14,16 +14,12 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        // Hitung Total Pendapatan (Hanya yang PAID)
         $totalRevenue = Transaction::where('status', 'paid')->sum('total_price');
 
-        // Hitung Transaksi yang perlu dicek (Waiting Approval)
         $waitingApproval = Transaction::where('status', 'waiting_approval')->count();
 
-        // Hitung Total Tiket Terjual (Paid Only)
         $ticketsSold = Transaction::where('status', 'paid')->sum('quantity');
 
-        // Hitung Total Email Masuk
         $subscribers = Subscriber::count();
 
         return [
@@ -36,7 +32,7 @@ class StatsOverview extends BaseWidget
             Stat::make('Butuh Verifikasi', $waitingApproval)
                 ->description('Cek bukti transfer sekarang!')
                 ->descriptionIcon('heroicon-m-bell-alert')
-                ->color($waitingApproval > 0 ? 'danger' : 'gray') // Merah kalau ada kerjaan
+                ->color($waitingApproval > 0 ? 'danger' : 'gray') 
                 ->chart([2, 5, 2, 6, 2, 5, 2]),
 
             Stat::make('Tiket Terjual', $ticketsSold)
