@@ -28,7 +28,6 @@ class SiteSettingResource extends Resource
     {
         return $form
             ->schema([
-                // TAB 1: TAMPILAN HERO
                 Forms\Components\Section::make('Hero Section & Teks')
                     ->schema([
                         Forms\Components\TextInput::make('hero_title')
@@ -42,7 +41,6 @@ class SiteSettingResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                // TAB BARU: VISUAL TIKET (Untuk Hero 3D Ticket)
                 Forms\Components\Section::make('Visual Tiket (Hiasan Hero)')
                     ->description('Atur teks yang muncul di gambar tiket 3D di halaman depan.')
                     ->schema([
@@ -75,7 +73,6 @@ class SiteSettingResource extends Resource
                         ]),
                     ]),
 
-                // TAB 2: TEMA WARNA
                 Forms\Components\Section::make('Tema Warna')
                     ->description('Ubah nuansa website langsung dari sini.')
                     ->schema([
@@ -93,7 +90,6 @@ class SiteSettingResource extends Resource
                             ->required(),
                     ])->columns(3),
 
-                // TAB 4: INFO LOKASI & WAKTU (UPDATED KOORDINAT)
                 Forms\Components\Section::make('Info Event')
                     ->schema([
                         Forms\Components\TextInput::make('location_name')
@@ -112,7 +108,6 @@ class SiteSettingResource extends Resource
                             ->required(),
                     ])->columns(2),
 
-                // TAB 5: REKENING (Tetap Ada)
                 Forms\Components\Section::make('Rekening & Pembayaran')
                     ->schema([
                         Forms\Components\TextInput::make('bank_name')
@@ -130,13 +125,11 @@ class SiteSettingResource extends Resource
                             ->image()
                             ->directory('payments')
                             ->deleteUploadedFileUsing(function ($file) {
-                                // otomatis hapus file saat field dihapus
                                 Storage::disk('public')->delete($file);
                             })
                             ->columnSpanFull(),
                     ])->columns(3),
 
-                // TAB 3: OTAL ORACLE (AI)
                 Forms\Components\Section::make('Konfigurasi AI (Oracle)')
                     ->schema([
                         Forms\Components\Textarea::make('oracle_prompt')

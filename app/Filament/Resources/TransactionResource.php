@@ -32,7 +32,6 @@ class TransactionResource extends Resource
                     ->schema([
                         Forms\Components\Section::make('Informasi Pembeli')
                             ->schema([
-                                // Ganti jadi Placeholder biar aman
                                 Forms\Components\Placeholder::make('code')
                                     ->label('Kode Booking')
                                     ->content(fn(Transaction $record): string => $record->code),
@@ -77,8 +76,6 @@ class TransactionResource extends Resource
                     ->schema([
                         Forms\Components\Section::make('Rincian Tiket')
                             ->schema([
-                                // INI FIX UTAMANYA: Pake Placeholder!
-                                // Pake content() buat ambil datanya
                                 Forms\Components\Placeholder::make('ticket_name')
                                     ->label('Jenis Tiket')
                                     ->content(fn(Transaction $record): string => $record->ticket->name ?? '-'),

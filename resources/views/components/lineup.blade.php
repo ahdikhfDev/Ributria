@@ -7,7 +7,6 @@
 
         <div class="relative">
             <template x-for="(artist, idx) in lineup">
-                <!-- Tambah class transition biar halus -->
                 <div class="group relative border-b border-white/10 py-10 cursor-pointer transition-all duration-300"
                      @mouseenter="hoveredArtist = artist"
                      @mouseleave="hoveredArtist = null">
@@ -22,10 +21,8 @@
                         </div>
                     </div>
 
-                    <!-- 🔥 TAMPILAN KHUSUS HP (MOBILE IMAGE) 🔥 -->
-                    <!-- Hanya muncul di layar kecil (md:hidden) -->
                     <div class="md:hidden mt-6 w-full max-w-sm relative rounded-lg overflow-hidden border border-white/10 shadow-lg"
-                         style="height: 200px;"> <!-- Tinggi dibatasi biar gak kegedean -->
+                         style="height: 200px;"> 
                         
                         <!-- Gambar Artis -->
                         <img :src="artist.img" class="w-full h-full object-cover filter grayscale" />
@@ -42,8 +39,6 @@
                 </div>
             </template>
 
-            <!-- 🔥 TAMPILAN KHUSUS LAPTOP (FLOATING HOVER) 🔥 -->
-            <!-- Hidden di mobile, Block di desktop (md:block) -->
             <div x-show="hoveredArtist"
                  x-transition:enter="transition ease-out duration-300"
                  x-transition:enter-start="opacity-0 translate-x-10 rotate-12 scale-90"

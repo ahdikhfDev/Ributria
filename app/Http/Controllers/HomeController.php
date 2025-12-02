@@ -13,10 +13,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // 1. Ambil Settingan Global
         $settings = SiteSetting::first();
         if (!$settings) {
-            // Default dummy data jika database kosong
             $settings = new SiteSetting([
                 'hero_title' => 'BISING NGERILIS JIWA LO',
                 'primary_color' => '#ff1f1f',
@@ -27,7 +25,6 @@ class HomeController extends Controller
             ]);
         }
 
-        // 2. Ambil Artis (Lineup)
         $artists = Artist::where('is_active', true)
             ->orderBy('sort_order')
             ->get()
@@ -39,7 +36,6 @@ class HomeController extends Controller
                 ];
             });
 
-        // 3. Ambil Lagu (Playlist)
         $tracks = Track::where('is_active', true)
             ->orderBy('sort_order')
             ->get()
@@ -52,14 +48,13 @@ class HomeController extends Controller
                 ];
             });
 
-        // 4. Ambil Tiket (UPDATE: Tambah ID)
         $tickets = Ticket::all()->map(function ($ticket) {
             return [
                 'id' => $ticket->id,
                 'name' => $ticket->name,
                 'price' => $ticket->price_display,
-                'stock' => $ticket->stock,            // <--- WAJIB DITAMBAH
-                'is_sold_out' => $ticket->is_sold_out, // <--- WAJIB DITAMBAH
+                'stock' => $ticket->stock,            
+                'is_sold_out' => $ticket->is_sold_out, 
                 'features' => $ticket->features ?? [],
                 'glow' => (bool) $ticket->is_featured,
                 'borderColor' => $ticket->is_featured ? '' : ($ticket->name == 'DEWA / VVIP' ? 'border-yellow-500' : 'border-gray-600'),

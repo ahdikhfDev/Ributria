@@ -22,7 +22,7 @@
 
             <!-- FORM STANDAR (TANPA JS) -->
             <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex gap-4">
-                @csrf <!-- Token Keamanan Wajib -->
+                @csrf
                 
                 <input type="email" 
                        name="email" 

@@ -27,9 +27,9 @@ class HindiaThemeSeeder extends Seeder
             'hero_description' => "Rayakan ketidaksempurnaan, menangis secukupnya, lalu kembali berjalan. Ini bukan sekadar konser, ini adalah sesi terapi massal untuk jiwa yang lelah.",
             
             // Warna Tema: Biru Laut Dalam & Oranye Senja
-            'primary_color' => '#3b82f6',   // Blue 500 (Melancholy)
-            'secondary_color' => '#f97316', // Orange 500 (Hope)
-            'background_color' => '#0f172a', // Slate 900 (Dark Blueish Black)
+            'primary_color' => '#3b82f6',   
+            'secondary_color' => '#f97316', 
+            'background_color' => '#0f172a',
             
             'location_name' => 'ISTORA SENAYAN',
             'event_date' => now()->addDays(45)->setTime(18, 30, 0), // Mulai pas senja
@@ -43,7 +43,7 @@ class HindiaThemeSeeder extends Seeder
             'ticket_price_label' => 'MAHAR',
             'ticket_price_display' => 'Rp 350rb++',
 
-            // Bank Info (Opsional)
+            // Bank Info 
             'bank_name' => 'BCA',
             'bank_account_number' => '8830-1234-5678',
             'bank_account_name' => 'SUN EATER OFFICIAL',
@@ -57,7 +57,6 @@ class HindiaThemeSeeder extends Seeder
             Instruction: Kalau user nanya tiket, bilang 'Investasi buat kesehatan mental lo'. Kalau nanya lineup, bilang 'Mereka yang bakal nemenin lo nangis'.",
         ]);
 
-        // 2. ARTISTS (Sirkel Sun Eater & Indie Pop)
         Artist::truncate();
 
         $artists = [
@@ -109,7 +108,7 @@ class HindiaThemeSeeder extends Seeder
                 'stock' => 200,
                 'features' => ['Front Row', 'Fast Lane', 'Merchandise Eksklusif', 'Akses Toilet VIP'],
                 'is_sold_out' => false,
-                'is_featured' => true, // Highlight
+                'is_featured' => true, 
             ],
             [
                 'name' => 'MEMBASUH (VVIP)',

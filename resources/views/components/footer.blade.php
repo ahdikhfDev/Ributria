@@ -2,7 +2,7 @@
     <!-- Texture Overlay -->
     <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
     
-    <!-- Stacked Text Effect (Judul Besar di Belakang) -->
+    <!-- Stacked Text Effect -->
     <div class="relative z-10 mb-12 select-none pointer-events-none">
         <h2 class="text-[18vw] font-black leading-[0.8] tracking-tighter text-transparent text-stroke-white opacity-10 absolute top-0 left-0 transform -translate-x-4 -translate-y-4">RiButRiA</h2>
         <h2 class="text-[18vw] font-black leading-[0.8] tracking-tighter text-transparent text-stroke-primary opacity-30 absolute top-0 left-0 transform translate-x-2 translate-y-2 mix-blend-screen" :style="`-webkit-text-stroke-color: ${activeTheme.primary}`">RiButRiA</h2>
@@ -15,16 +15,14 @@
     <footer class="w-full bg-[#050505] border-t border-white/10 text-white font-mono text-sm relative z-20">
         <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10">
             
-            <!-- KOLOM 1: LOKASI (DINAMIS) -->
+            <!-- LOKASI -->
             <div class="p-8 md:p-10 hover:bg-white/5 transition-colors group h-full flex flex-col justify-between">
                 <div>
                     <div class="text-[10px] text-gray-500 mb-4 uppercase tracking-widest border-b border-white/10 pb-2 w-max">01 // KOORDINAT</div>
                     <div class="text-3xl font-black mb-2 group-hover:text-primary transition-colors uppercase leading-none" :style="`color: ${activeTheme.text}`">LOKASI EVENT</div>
                     
-                    <!-- Ambil Nama Lokasi dari Database -->
                     <div class="text-gray-400 text-lg mt-4">{{ $settings->location_name }}</div>
                     
-                    <!-- KOORDINAT DINAMIS DARI DB -->
                     <div class="mt-1 font-mono tracking-wider text-xs opacity-70 group-hover:opacity-100 transition-opacity" :style="`color: ${activeTheme.primary}`">
                         {{ $settings->footer_coordinates ?? '-6.2088° S, 106.8456° E' }}
                     </div>
@@ -35,7 +33,7 @@
                 </a>
             </div>
 
-            <!-- KOLOM 2: SOSMED -->
+            <!-- KOLOM SOSMED -->
             <div class="p-8 md:p-10 hover:bg-white/5 transition-colors h-full">
                 <div class="text-[10px] text-gray-500 mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-max">02 // JARINGAN</div>
                 <div class="flex flex-col gap-6 text-gray-400">
@@ -63,7 +61,7 @@
                 </div>
             </div>
 
-            <!-- KOLOM 3: LEGAL -->
+            <!-- LEGAL -->
             <div class="p-8 md:p-10 hover:bg-white/5 transition-colors h-full">
                 <div class="text-[10px] text-gray-500 mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-max">03 // PROTOKOL</div>
                 <div class="flex flex-col gap-4 text-gray-500 text-xs md:text-sm">
@@ -79,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- KOLOM 4: SCROLL TOP -->
+            <!-- SCROLL TOP -->
             <div class="p-8 md:p-10 flex flex-col justify-between hover:bg-white/5 transition-colors cursor-pointer group h-full bg-gradient-to-b from-transparent to-white/5" 
                  @click="window.scrollTo({ top: 0, behavior: 'smooth' })">
                 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\SiteSetting;
+use App\Models\Artist;
+use App\Models\Ticket;
 
 class OracleController extends Controller
 {
@@ -11,59 +14,80 @@ class OracleController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
-            'theme'   => 'required|string'
         ]);
 
         $apiKey = env('GEMINI_API_KEY');
-        $themeName = $request->theme;
 
-        // KNOWLEDGE BASE (Data Website)
-        // Kita masukin data Lineup & Tiket disini biar AI-nya pinter & nyambung
+        $settings = SiteSetting::first();
+
+        // Fallback kalau database masih kosong (Safety)
+        if (!$settings) {
+            return response()->json(['reply' => 'Sistem lagi reboot bro (Database kosong). Hubungi Admin.']);
+        }
+
+        // Ambil Lineup Artis yang aktif dari DB
+        $artists = Artist::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(function ($artist) {
+                return "- {$artist->name} (Genre: {$artist->genre})";
+            })->implode("\n");
+
+        // Ambil Data Tiket & Stok dari DB
+        $tickets = Ticket::all()
+            ->map(function ($ticket) {
+                $status = ($ticket->is_sold_out || $ticket->stock <= 0) ? '[SOLD OUT]' : '[TERSEDIA]';
+                $features = is_array($ticket->features) ? implode(', ', $ticket->features) : $ticket->features;
+                return "- {$ticket->name}: {$ticket->price_display} (Stok: {$ticket->stock}) {$status} \n  Benefit: {$features}";
+            })->implode("\n");
+
         $context = "
-        FAKTA WEBSITE 'RiButRiA':
+        FAKTA TERBARU EVENT 'RiButRiA' (Gunakan ini sebagai sumber kebenaran):
         
-        1. LINEUP ARTIS (Asli):
-           - THE CHAOS ENGINE (Genre: Industrial Noise)
-           - NEON VAMPIRES (Genre: Synthwave)
-           - DATA MOSH (Genre: Glitch Hop)
-           - VOID WALKER (Genre: Dark Ambient)
+        A. LOKASI & WAKTU:
+           - Lokasi: {$settings->location_name}
+           - Tanggal: {$settings->event_date}
         
-        2. TIKET:
-           - PEMULA / ROOKIE: IDR 750K (Berdiri, 1x Minum)
-           - RUSUH / VIP: IDR 1.500K (Moshpit, Fast Lane, 3x Minum)
-           - DEWA / VVIP: IDR 3.000K (Box Pribadi, Meet & Greet)
+        B. LINEUP ARTIS SAAT INI:
+           {$artists}
         
-        3. TANGGAL: 25 AGUSTUS 2025
-        4. LOKASI: JAKARTA (GBK)
+        C. INFO TIKET & HARGA:
+           {$tickets}
         ";
 
-        // Prompt System yang udah diperkuat Data
-        // UPDATE: Instruksi Formatting diubah biar GAK PAKE BINTANG (*)
-        // UPDATE 2: Persona diubah jadi 'Anak Konser' (Kurangi istilah teknologi)
-        $systemPrompt = "You are 'The Oracle', the ultimate hype-man and guide for the RiButRiA music festival (Theme: {$themeName}). 
-        
-        CONTEXT DATA:
+        $adminDefinedPersona = $settings->oracle_prompt ?? "You are 'The Oracle', hype-man for RiButRiA festival.";
+
+        $systemPrompt = "
+        PERAN KAMU:
+        {$adminDefinedPersona}
+
+        DATA FAKTA REAL-TIME:
         {$context}
-        
-        INSTRUCTION:
-        - Gunakan data di atas untuk menjawab pertanyaan user. JANGAN NGARANG ARTIS LAIN.
-        - Persona: Lo adalah anak musik banget, enerjik, seru, dan edgy. Lo tau segalanya soal stage, sound system, dan crowd.
-        - Gaya bahasa: Casual Indonesian Slang (Bahasa Gaul, Lo/Gue).
-        - PENTING: Fokus pada vibe KONSER, STAGE, MUSIK, dan CROWD. JANGAN gunakan metafora teknologi, coding, glitch, atau hacking. Ganti istilah 'sistem/jaringan' dengan 'stage/arena/vibe'.
-        - Formatting: JANGAN gunakan simbol bintang (*) atau markdown bold. Gunakan huruf KAPITAL jika butuh penekanan. Gunakan bullet points (-) untuk list.
-        - Jangan terlalu panjang, to the point aja.";
 
-        $response = Http::withHeaders(['Content-Type' => 'application/json'])
-            ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key={$apiKey}", [
-                'contents' => [
-                    ['parts' => [['text' => $request->message]]]
-                ],
-                'systemInstruction' => [
-                    'parts' => [['text' => $systemPrompt]]
-                ]
-            ]);
+        INSTRUKSI TAMBAHAN:
+        - Jawab pertanyaan user hanya berdasarkan DATA FAKTA di atas.
+        - JANGAN HALUSINASI tentang artis atau harga tiket yang tidak ada di data.
+        - Jika user bertanya tiket, jelaskan benefitnya dan status ketersediaannya.
+        - Gunakan format bullet points (-) untuk list agar mudah dibaca.
+        - JANGAN gunakan simbol bintang (*) untuk bold, gunakan HURUF KAPITAL untuk penekanan.
+        ";
 
-        $reply = $response->json('candidates.0.content.parts.0.text') ?? 'Mic check satu dua... Sinyal putus bro, coba teriak lagi!';
+        // KIRIM KE GEMINI
+        try {
+            $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key={$apiKey}", [
+                    'contents' => [
+                        ['parts' => [['text' => $request->message]]]
+                    ],
+                    'systemInstruction' => [
+                        'parts' => [['text' => $systemPrompt]]
+                    ]
+                ]);
+
+            $reply = $response->json('candidates.0.content.parts.0.text') ?? 'Sinyal ke server putus bro. Coba teriak lagi!';
+        } catch (\Exception $e) {
+            $reply = "Waduh, sistem AI lagi overload nih. Coba lagi nanti ya.";
+        }
 
         return response()->json(['reply' => $reply]);
     }

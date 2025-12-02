@@ -35,7 +35,6 @@
                             default => 'UNKNOWN'
                         };
                         
-                        // Warna status kita handle pake Alpine logic biar dinamis atau hardcoded logic blade untuk status spesifik
                     @endphp
 
                     <div class="inline-block px-6 py-2 border-2 rounded-lg font-mono text-sm md:text-base font-bold uppercase tracking-widest animate-pulse"
@@ -122,7 +121,7 @@
                     </div>
                 </div>
 
-                <!-- FORM UPLOAD / INFO BANK (HANYA JIKA BELUM LUNAS) -->
+                <!-- FORM UPLOAD / INFO BANK  -->
                 @if($transaction->status == 'pending' || $transaction->status == 'rejected')
                     <div class="bg-[#0a0a0a] p-6 md:p-8 rounded-2xl border border-white/10 mb-8 relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-1 h-full" :style="`background-color: ${activeTheme.primary}`"></div>

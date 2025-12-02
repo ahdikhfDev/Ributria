@@ -74,8 +74,7 @@
                                 <template x-for="i in 30"><div class="bg-white" :style="`width: ${Math.random() * 3}px; height: 100%`"></div></template>
                             </div>
                             
-                            <!-- TOMBOL ACTION -->
-                            <!-- Jika Stok > 0 & Tidak Sold Out: Tombol Normal -->
+                            <!-- TOMBOL ACTION NORMAL -->
                             <template x-if="!tier.is_sold_out && tier.stock > 0">
                                 <button @click="openCheckout(tier)"
                                         class="w-full py-3 font-black uppercase tracking-widest transition-all border-2 hover:bg-white hover:text-black text-white text-sm bg-transparent cursor-pointer"
@@ -84,7 +83,6 @@
                                 </button>
                             </template>
 
-                            <!-- Jika Habis: Tombol Disabled -->
                             <template x-if="tier.is_sold_out || tier.stock <= 0">
                                 <button disabled
                                         class="w-full py-3 font-black uppercase tracking-widest border-2 border-gray-800 text-gray-600 text-sm bg-gray-900 cursor-not-allowed">
@@ -98,7 +96,7 @@
         </div>
     </div>
 
-    <!-- === MODAL POP-UP CHECKOUT (SAMA SEPERTI SEBELUMNYA) === -->
+    <!-- === MODAL POP-UP CHECKOUT === -->
     <div x-show="checkoutOpen" 
          class="fixed inset-0 z-50 flex items-center justify-center px-4"
          style="display: none;">
@@ -169,7 +167,6 @@
                         <div class="flex items-center gap-4">
                             <button type="button" @click="if(checkoutForm.qty > 1) checkoutForm.qty--" class="w-12 h-12 bg-gray-800 text-white font-bold hover:bg-gray-700 rounded transition-colors">-</button>
                             <input type="number" name="quantity" readonly x-model="checkoutForm.qty" class="w-full bg-black border border-gray-700 p-3 text-center text-white font-bold rounded h-12">
-                            <!-- Logic: Gak bisa tambah kalau melebihi stok -->
                             <button type="button" 
                                     @click="if(checkoutForm.qty < 10 && checkoutForm.qty < selectedTicket.stock) checkoutForm.qty++" 
                                     class="w-12 h-12 bg-gray-800 text-white font-bold hover:bg-gray-700 rounded transition-colors disabled:opacity-50"

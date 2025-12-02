@@ -28,22 +28,19 @@ class Transaction extends Model
                 $transaction->ticket_code = trim($transaction->ticket_code);
             }
             
-            // 2. LOGIC SAAT STATUS BERUBAH JADI 'PAID'
-            // isDirty('status') memastikan logic ini cuma jalan pas statusnya diganti, bukan pas edit data lain.
             if ($transaction->isDirty('status') && $transaction->status === 'paid') {
                 
-                // A. Generate Kode Tiket (Jika belum ada)
                 if (empty($transaction->ticket_code)) {
                     $transaction->ticket_code = 'TKT-' . strtoupper(Str::random(4)) . rand(1000, 9999);
                 }
 
-                // B. KURANGI STOK TIKET (Penting!)
+                // B. KURANGI STOK TIKET
                 $ticket = $transaction->ticket;
                 if ($ticket) {
                     // Kurangi stok sesuai jumlah pembelian
                     $ticket->decrement('stock', $transaction->quantity);
                     
-                    // Cek kalau stok habis, otomatis set flag sold out
+                    // Cek kalau stok habis
                     if ($ticket->fresh()->stock <= 0) {
                         $ticket->update(['is_sold_out' => true]);
                     }
@@ -51,7 +48,7 @@ class Transaction extends Model
             }
         });
 
-        // 3. Hapus file bukti bayar otomatis kalau transaksi dihapus dari database
+        
         static::deleting(function ($transaction) {
             if ($transaction->payment_proof && Storage::disk('public')->exists($transaction->payment_proof)) {
                 Storage::disk('public')->delete($transaction->payment_proof);

@@ -3,7 +3,7 @@
      x-show="tracks && tracks.length > 0" 
      style="display: none;"> 
     
-    <!-- Album Art Animasi (Kaset/Vinyl) -->
+    <!-- Album Art Animasi -->
     <div class="relative w-12 h-12 rounded-full overflow-hidden border-2 animate-spin-slow bg-black" 
          :style="`animation-play-state: ${isPlaying ? 'running' : 'paused'}; border-color: ${activeTheme.primary}`">
         
@@ -15,7 +15,7 @@
         <!-- Overlay Warna Tema -->
         <div class="absolute inset-0 mix-blend-overlay" :style="`background-color: ${activeTheme.primary}`"></div>
         
-        <!-- Lubang Tengah (Biar kayak CD beneran) -->
+        <!-- Lubang Tengah  -->
         <div class="absolute top-1/2 left-1/2 w-3 h-3 bg-[#111] rounded-full transform -translate-x-1/2 -translate-y-1/2 border border-white/30"></div>
     </div>
     

@@ -5,7 +5,7 @@
 
     <div class="container mx-auto px-6 relative z-10">
         
-        <!-- HEADER & SEARCH BOX (Desain Simpel Pilihan Lo) -->
+        <!-- HEADER & SEARCH BOX -->
         <div class="max-w-2xl mx-auto text-center">
             <h2 class="text-4xl font-black uppercase mb-2" :style="`color: ${activeTheme.text}`">
                 CEK <span :style="`color: ${activeTheme.primary}`">STATUS</span>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <!-- RESULT CONTAINER (Desain Tiket Premium) -->
+        <!-- Tiket Result -->
         <div x-show="checkResult" 
              x-transition:enter="transition ease-out duration-500"
              x-transition:enter-start="opacity-0 translate-y-10 scale-95"
@@ -44,16 +44,15 @@
              class="mt-16 max-w-4xl mx-auto text-left"
              style="display: none;">
 
-            <!-- 1. TIKET SUKSES (PAID) - TAMPILAN TIKET FISIK -->
+            <!-- TIKET FISIK -->
             <template x-if="checkResult && checkResult.status === 'success' && checkResult.data.status === 'paid'">
                 <div class="relative w-full bg-[#111] border rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] transform hover:rotate-1 transition-transform duration-500"
                      :style="`border-color: ${activeTheme.primary}`">
                     
-                    <!-- Background Noise -->
                     <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
                     
                     <div class="flex flex-col md:flex-row">
-                        <!-- Left Part (Main Ticket) -->
+                        <!-- Left Part -->
                         <div class="flex-1 p-8 md:p-10 relative border-b md:border-b-0 md:border-r border-dashed border-white/20">
                             <!-- Watermark -->
                             <div class="absolute right-0 top-1/2 -translate-y-1/2 text-[6rem] md:text-[10rem] font-black text-white/5 pointer-events-none select-none rotate-12 truncate max-w-full">PAID</div>
@@ -87,12 +86,12 @@
                             <div class="absolute -right-3 top-1/2 -mt-3 w-6 h-6 rounded-full bg-black z-20 hidden md:block"></div>
                         </div>
 
-                        <!-- Right Part (Stub / QR) -->
+                        <!-- Right Part  -->
                         <div class="md:w-72 bg-[#0a0a0a] p-8 flex flex-col items-center justify-center relative">
                             <div class="absolute -left-3 top-1/2 -mt-3 w-6 h-6 rounded-full bg-black z-20 hidden md:block"></div>
                             
                             <div class="w-40 h-40 bg-white p-2 rounded mb-4 shadow-lg transform hover:scale-105 transition-transform">
-                                <!-- REAL QR CODE GENERATOR (API) -->
+                                <!-- QRCODE -->
                                 <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${checkResult.data.ticket_code}`" 
                                      alt="QR Code Tiket" 
                                      class="w-full h-full object-contain"
@@ -109,7 +108,7 @@
                 </div>
             </template>
 
-            <!-- 2. STATUS LAIN (PENDING/REJECTED) - Premium Card Design -->
+            <!-- STATUS Card Design -->
             <template x-if="checkResult && checkResult.status === 'success' && checkResult.data.status !== 'paid'">
                 <div class="bg-[#111] border border-white/10 rounded-xl p-12 text-center max-w-xl mx-auto relative overflow-hidden group shadow-2xl">
                     <div class="absolute top-0 left-0 w-full h-1 transition-colors duration-300" 

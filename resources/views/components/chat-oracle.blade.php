@@ -18,7 +18,7 @@
          :style="`border-color: ${activeTheme.primary}`"
          style="display: none;">
         
-        <!-- 1. Header (Tetap di atas) -->
+        <!--  Header  -->
         <div class="p-4 flex items-center justify-between shrink-0" :style="`background-color: ${activeTheme.primary}`">
             <div class="flex items-center gap-3">
                 <i data-lucide="bot" class="w-6 h-6 text-black"></i>
@@ -30,7 +30,7 @@
             <i data-lucide="sparkles" class="w-5 h-5 text-black animate-pulse"></i>
         </div>
         
-        <!-- 2. Area Chat (Scrollable) -->
+        <!-- 2. Area Chat  -->
         <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/90 backdrop-blur-sm custom-scrollbar">
             <template x-for="msg in messages">
                 <div class="flex" :class="msg.role === 'user' ? 'justify-end' : 'justify-start'">
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <!-- 3. INPUT AREA (Ini yang tadi hilang) -->
+        <!-- Input massage -->
         <div class="p-4 bg-[#111] border-t border-white/10 shrink-0 z-20">
             <div class="flex gap-2 relative">
                 <input type="text" 

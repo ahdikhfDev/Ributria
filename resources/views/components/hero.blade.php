@@ -5,7 +5,7 @@
         <div class="relative transition-transform duration-100 ease-out" 
              :style="window.innerWidth > 768 ? `transform: translate(${mousePos.x * -10}px, ${mousePos.y * -10}px)` : ''">
             
-            <!-- (Countdown -->
+            <!-- Countdown -->
             <div class="flex justify-center md:justify-start mb-6 md:mt-16">
                 <div class="inline-flex items-center gap-2 px-3 py-1 border bg-white/5 rounded-full text-[10px] md:text-xs font-bold tracking-widest backdrop-blur-sm"
                      :style="`border-color: ${activeTheme.primary}4D; color: ${activeTheme.primary}`">

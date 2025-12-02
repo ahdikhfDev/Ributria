@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'background_color' => '#050505',
             'location_name' => 'JAKARTA (GBK)',
             'event_date' => now()->addDays(30)->setTime(19, 0, 0),
-            'oracle_prompt' => "You are 'The Oracle', the ultimate hype-man and guide for the RiButRiA music festival.",
+            'oracle_prompt' => "Kamu adalah AI asisten yang santai banget. Pake bahasa gaul Jakarta Selatan. Sering-sering bilang 'Jujurly' atau 'Which is",
         ]);
 
         // 2. SEED ARTISTS
