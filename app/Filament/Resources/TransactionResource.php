@@ -57,7 +57,7 @@ class TransactionResource extends Resource
                                     ->options([
                                         'pending' => 'Belum Bayar',
                                         'waiting_approval' => 'Menunggu Verifikasi',
-                                        'paid' => 'LUNAS (Approved)',
+                                        'paid' => 'Lunas    ',
                                         'rejected' => 'Ditolak',
                                     ])
                                     ->required()
