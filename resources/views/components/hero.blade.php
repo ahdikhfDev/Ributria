@@ -1,31 +1,22 @@
-<section class="relative z-10 w-full min-h-screen flex flex-col md:flex-row items-center justify-center px-6 py-20 md:py-0 md:px-0 overflow-hidden">
+<section class="relative z-10 w-full min-h-screen flex flex-col md:flex-row items-center justify-center px-6 overflow-hidden">
     
     <!-- Left: Typography -->
     <div class="w-full md:w-1/2 h-full flex flex-col justify-center relative z-20 md:pl-20 pt-10 md:pt-0 order-2 md:order-1">
         <div class="relative transition-transform duration-100 ease-out" 
              :style="window.innerWidth > 768 ? `transform: translate(${mousePos.x * -10}px, ${mousePos.y * -10}px)` : ''">
             
-            <!-- Countdown -->
-            <div class="flex justify-center md:justify-start gap-2 md:gap-4 mb-8 font-mono animate-fade-in-up" :style="`color: ${activeTheme.primary}`">
-                <template x-for="(value, unit) in timeLeft">
-                    <div class="text-center">
-                        <div class="text-xl md:text-3xl font-black bg-white/5 border border-white/10 px-2 md:px-3 py-2 rounded mb-1 min-w-[45px] md:min-w-[60px]" x-text="value.toString().padStart(2, '0')"></div>
-                        <div class="text-[8px] md:text-[10px] uppercase tracking-wider opacity-60" x-text="unit"></div>
-                    </div>
-                </template>
-            </div>
+            <!-- (Countdown DIPINDAHKAN DARI SINI KE KANAN) -->
 
-            <div class="flex justify-center md:justify-start mb-6">
+            <div class="flex justify-center md:justify-start mb-6 md:mt-16">
                 <div class="inline-flex items-center gap-2 px-3 py-1 border bg-white/5 rounded-full text-[10px] md:text-xs font-bold tracking-widest backdrop-blur-sm"
                      :style="`border-color: ${activeTheme.primary}4D; color: ${activeTheme.primary}`">
                     <span class="w-2 h-2 rounded-full animate-pulse" :style="`background-color: ${activeTheme.primary}`"></span>
-                    <!-- TAHUN OTOMATIS DARI EVENT DATE -->
                     KONSER LIVE {{ \Carbon\Carbon::parse($settings->event_date)->year ?? '2025' }}
                 </div>
             </div>
 
             <!-- JUDUL UTAMA WEB -->
-            <h2 class="text-5xl md:text-6xl lg:text-[7vw] font-black leading-[0.9] tracking-tighter mix-blend-difference text-center md:text-left">
+            <h2 class="text-5xl md:text-6xl lg:text-[6vw] font-black leading-[0.9] tracking-tighter mix-blend-difference text-center md:text-left">
                 {!! nl2br(e($settings->hero_title)) !!}
             </h2>
             
@@ -34,7 +25,7 @@
                 {{ $settings->hero_description }}
             </p>
 
-            <div class="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+            <div class="mt-8 md:mt-10 mb-10 md:mb-0 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
                 <button @click="document.getElementById('tickets').scrollIntoView({behavior: 'smooth'})" 
                         class="w-full sm:w-auto group relative px-8 py-4 bg-[#e0e0e0] text-black font-bold text-lg overflow-hidden transition-transform active:scale-95 rounded md:rounded-none">
                     <div class="absolute inset-0 w-full h-full translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" :style="`background-color: ${activeTheme.primary}`"></div>
@@ -53,11 +44,24 @@
     </div>
 
     <!-- Right: Ticket Visual (Animasi 3D) -->
-    <div class="w-full md:w-1/2 h-[300px] md:h-full relative flex items-center justify-center pointer-events-none md:pointer-events-auto order-1 md:order-2 mb-8 md:mb-0">
+    <!-- Tambahkan 'flex-col' untuk menumpuk Countdown di atas Tiket -->
+    <div class="w-full md:w-1/2 h-[400px] md:h-full relative flex flex-col items-center justify-center pointer-events-none md:pointer-events-auto order-1 md:order-2 mb-8 md:mb-0 mt-20 md:mt-0">
         
         <!-- Glow Background -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[400px] md:h-[400px] rounded-full blur-[80px] md:blur-[120px] opacity-20 animate-pulse-slow" :style="`background-color: ${activeTheme.primary}`"></div>
 
+        <!-- COUNTDOWN (DIPINDAHKAN KE SINI) -->
+        <div class="relative z-40 flex justify-center gap-2 md:gap-4 mb-8 font-mono animate-fade-in-up" :style="`color: ${activeTheme.primary}`">
+            <template x-for="(value, unit) in timeLeft">
+                <div class="text-center">
+                    <!-- Tambah background gelap transparan biar kebaca jelas di atas glow -->
+                    <div class="text-xl md:text-3xl font-black bg-black/50 border border-white/20 px-2 md:px-3 py-2 rounded mb-1 min-w-[45px] md:min-w-[60px] backdrop-blur-md shadow-lg" x-text="value.toString().padStart(2, '0')"></div>
+                    <div class="text-[8px] md:text-[10px] uppercase tracking-wider opacity-80 font-bold bg-black/30 rounded px-1" x-text="unit"></div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Ticket Wrapper -->
         <div class="relative z-30 w-full max-w-[90%] md:max-w-[600px] transition-transform duration-100 ease-out"
              :style="window.innerWidth > 768 ? `transform: perspective(1000px) rotateX(${mousePos.y * 5}deg) rotateY(${mousePos.x * -5}deg) translate(${mousePos.x * 20}px, ${mousePos.y * 20}px)` : ''">
             
@@ -76,14 +80,14 @@
                         </div>
                         
                         <div class="text-right">
-                            <!-- TANGGAL DINAMIS (Dari event_date) -->
+                            <!-- TANGGAL DINAMIS -->
                             <div class="text-lg md:text-2xl font-black leading-none">{{ \Carbon\Carbon::parse($settings->event_date)->day ?? '25' }}</div>
                             <div class="text-[8px] md:text-[10px] uppercase font-bold tracking-wider">{{ \Carbon\Carbon::parse($settings->event_date)->format('F') ?? 'AGUSTUS' }}</div>
                         </div>
                     </div>
 
                     <div class="relative z-10 text-center">
-                        <!-- JUDUL HERO TENGAH TIKET (Dinamis) -->
+                        <!-- JUDUL TENGAH TIKET -->
                         <h2 class="text-2xl md:text-5xl font-black uppercase tracking-tighter text-white mb-1 md:mb-2 drop-shadow-lg leading-none">
                             {{ Str::limit($settings->ticket_label_title ?? $settings->hero_title, 15) }}
                         </h2>
@@ -95,11 +99,11 @@
 
                     <div class="relative z-10 flex justify-between items-end">
                         <div class="border-2 rounded px-2 py-1 md:px-4 md:py-2 transform -rotate-3 bg-black/20 backdrop-blur-sm" :style="`border-color: ${activeTheme.primary}`">
-                            <!-- LABEL HARGA DINAMIS -->
+                            <!-- LABEL HARGA -->
                             <div class="text-[6px] md:text-[8px] uppercase font-bold" :style="`color: ${activeTheme.primary}`">
                                 {{ $settings->ticket_price_label ?? 'HARGA' }}
                             </div>
-                            <!-- NILAI HARGA DINAMIS -->
+                            <!-- NOMINAL HARGA -->
                             <div class="text-sm md:text-xl font-bold text-white">
                                 {{ $settings->ticket_price_display ?? 'Rp 750K++' }}
                             </div>
@@ -121,7 +125,7 @@
                      :style="`background-image: linear-gradient(to bottom left, ${activeTheme.primary}40, ${activeTheme.cardBg})`">
                     <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
                     <div class="relative z-10 h-full flex items-center justify-between w-full text-white">
-                        <!-- LABEL VERTIKAL (Dinamis) -->
+                        <!-- LABEL VERTIKAL -->
                         <h3 class="text-xl md:text-3xl font-black uppercase tracking-widest whitespace-nowrap" style="writing-mode: vertical-rl; text-orientation: mixed;">
                             {{ Str::limit($settings->ticket_label_left ?? 'BISING NGE', 10, '') }}
                         </h3>
