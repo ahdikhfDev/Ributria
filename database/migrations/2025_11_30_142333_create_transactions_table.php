@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             
             // Kode Unik
-            $table->string('code')->unique(); // TRX-XXXX
-            $table->string('ticket_code')->nullable()->unique(); // TKT-XXXX (Baru muncul pas lunas)
+            $table->string('code')->unique();
+            $table->string('ticket_code')->nullable()->unique();
             
             // Data Pembeli
             $table->string('guest_name');

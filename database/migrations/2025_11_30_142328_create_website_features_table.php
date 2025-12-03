@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // 1. TABEL TRACKS (Buat Music Player)
+        // 1. TABEL TRACKS
         Schema::create('tracks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -19,11 +19,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 2. TABEL SUBSCRIBERS (Buat Email Newsletter)
+        // 2. TABEL SUBSCRIBERS 
         Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();
-            // Kita hapus kolom message/is_read biar sesuai konsep "Simpel Email Aja"
             $table->timestamps();
         });
     }

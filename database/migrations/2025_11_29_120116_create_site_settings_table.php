@@ -25,7 +25,6 @@ return new class extends Migration
 
             // --- 4. EVENT & LOKASI ---
             $table->string('location_name')->default('JAKARTA (GBK)');
-            // Pakai dateTime biar ada jam-nya untuk countdown akurat
             $table->dateTime('event_date')->nullable(); 
             $table->string('footer_coordinates')->default('-6.2088° S, 106.8456° E')->nullable();
 
