@@ -20,7 +20,7 @@ class OracleController extends Controller
 
         $settings = SiteSetting::first();
 
-        // Fallback kalau database masih kosong (Safety)
+        // Fallback kalau database masih kosong
         if (!$settings) {
             return response()->json(['reply' => 'Sistem lagi reboot bro (Database kosong). Hubungi Admin.']);
         }

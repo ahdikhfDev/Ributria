@@ -34,7 +34,7 @@ class Transaction extends Model
                     $transaction->ticket_code = 'TKT-' . strtoupper(Str::random(4)) . rand(1000, 9999);
                 }
 
-                // B. KURANGI STOK TIKET
+                // KURANGI STOK TIKET
                 $ticket = $transaction->ticket;
                 if ($ticket) {
                     // Kurangi stok sesuai jumlah pembelian

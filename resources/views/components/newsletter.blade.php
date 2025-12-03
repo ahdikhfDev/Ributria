@@ -1,4 +1,4 @@
-<section id="newsletter" class="py-20 relative border-t border-white/10 bg-black overflow-hidden">
+<section id="newsletter" class="py-20 relative border-t border-white/10 bg-black overflow-hidden" :style="`background-color: ${activeTheme.bg}`">
     <div class="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
         <div class="md:w-1/2 text-white">
             <h2 class="text-4xl font-black uppercase mb-4" :style="`color: ${activeTheme.text}`">GABUNG <span :style="`color: ${activeTheme.primary}`">GERAKAN KITA</span></h2>

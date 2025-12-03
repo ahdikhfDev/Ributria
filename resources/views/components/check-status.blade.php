@@ -1,4 +1,4 @@
-<section id="check-status" class="py-20 relative bg-black overflow-hidden border-t border-white/10">
+<section id="check-status" class="py-20 relative bg-black overflow-hidden border-t border-white/10" :style="`background-color: ${activeTheme.bg}`">
     <!-- Hiasan Background -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>

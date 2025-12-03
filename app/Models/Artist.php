@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Artist extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['name'];
 
     protected static function boot()
     {

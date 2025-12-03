@@ -1,4 +1,4 @@
-<div class="relative pt-32 pb-0 overflow-hidden flex flex-col items-center justify-center bg-black border-t border-white/10">
+<div class="relative pt-32 pb-0 overflow-hidden flex flex-col items-center justify-center bg-black border-t border-white/10" :style="`background-color: ${activeTheme.bg}`">
     <!-- Texture Overlay -->
     <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
     
@@ -12,7 +12,7 @@
     <div class="mb-16 font-mono text-xs md:text-sm tracking-[1em] uppercase opacity-50" :style="`color: ${activeTheme.primary}`">Sistem Tiket v.2.0.5 // ONLINE</div>
 
     <!-- MAIN FOOTER GRID -->
-    <footer class="w-full bg-[#050505] border-t border-white/10 text-white font-mono text-sm relative z-20">
+    <footer class="w-full bg-[#050505] border-t border-white/10 text-white font-mono text-sm relative z-20" :style="`background-color: ${activeTheme.bg}`">
         <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10">
             
             <!-- LOKASI -->
